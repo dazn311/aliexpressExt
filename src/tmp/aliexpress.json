@@ -1,0 +1,505 @@
+{
+    "result": {
+      "status": {
+        "data": "success",
+        "code": 200,
+        "executionTime": "0.62",
+        "requestTime": "2022-10-03 01:34:52",
+        "endpoint": "item_search",
+        "requestId": "20221003633a3c3c16d38",
+        "apiVersion": "3.1",
+        "la": "0.00",
+        "pmu": 702648,
+        "mu": 702624
+      },
+      "settings": {
+        "q": "iphone",
+        "catId": "",
+        "loc": "",
+        "attr": "",
+        "sort": "default",
+        "page": "1",
+        "region": "US",
+        "locale": "en_US",
+        "currency": "USD"
+      },
+      "base": {
+        "hasNextPage": true,
+        "totalResults": 144913,
+        "pageSize": 20,
+        "q": "iphone",
+        "locationList": [
+          {
+            "name": "US"
+          },
+          {
+            "name": "TR"
+          },
+          {
+            "name": "CN"
+          }
+        ],
+        "attributeList": [],
+        "categoryList": {
+          "list": [
+            {
+              "name": "Cellphones & Telecommunications",
+              "id": 509,
+              "count": 288427,
+              "subList": [
+                {
+                  "name": "Cellphones",
+                  "id": 5090301,
+                  "count": 624
+                },
+                {
+                  "name": "Phone Screen Protectors",
+                  "id": 200003089,
+                  "count": 43529
+                },
+                {
+                  "name": "Mobile Phone Chargers",
+                  "id": 100003571,
+                  "count": 38689
+                },
+                {
+                  "name": "Mobile Phone Cables",
+                  "id": 100003569,
+                  "count": 31477
+                },
+                {
+                  "name": "Wireless Chargers",
+                  "id": 200217751,
+                  "count": 27376
+                },
+                {
+                  "name": "Half-wrapped Cases",
+                  "id": 200217991,
+                  "count": 2565
+                },
+                {
+                  "name": "Wallet Cases",
+                  "id": 200216972,
+                  "count": 182
+                },
+                {
+                  "name": "Phone Accessory Bundles & Sets",
+                  "id": 200003169,
+                  "count": 5696
+                },
+                {
+                  "name": "Mobile Phone LCD Screens",
+                  "id": 200005298,
+                  "count": 42
+                },
+                {
+                  "name": "Phone Holders & Stands",
+                  "id": 5093004,
+                  "count": 549
+                }
+              ]
+            },
+            {
+              "name": "Consumer Electronics",
+              "id": 44,
+              "count": 66260,
+              "subList": [
+                {
+                  "name": "Earphones & Headphones",
+                  "id": 63705,
+                  "count": 164
+                },
+                {
+                  "name": "Smart Watches",
+                  "id": 200010206,
+                  "count": 3465
+                },
+                {
+                  "name": "Phone Earphones & Headphones",
+                  "id": 200216654,
+                  "count": 152
+                },
+                {
+                  "name": "Bluetooth Earphones & Headphones",
+                  "id": 200216593,
+                  "count": 107
+                },
+                {
+                  "name": "Earphones",
+                  "id": 200216686,
+                  "count": 78
+                }
+              ]
+            },
+            {
+              "name": "Tools",
+              "id": 1420,
+              "count": 16343
+            },
+            {
+              "name": "Computer & Office",
+              "id": 7,
+              "count": 17771
+            },
+            {
+              "name": "Security & Protection",
+              "id": 30,
+              "count": 9510
+            },
+            {
+              "name": "Automobiles & Motorcycles",
+              "id": 34,
+              "count": 18372
+            },
+            {
+              "name": "Electronic Components & Supplies",
+              "id": 502,
+              "count": 2734
+            },
+            {
+              "name": "Home Improvement",
+              "id": 13,
+              "count": 5435
+            },
+            {
+              "name": "Lights & Lighting",
+              "id": 39,
+              "count": 2075
+            },
+            {
+              "name": "Home & Garden",
+              "id": 15,
+              "count": 3466
+            },
+            {
+              "name": "Toys & Hobbies",
+              "id": 26,
+              "count": 1651
+            },
+            {
+              "name": "Sports & Entertainment",
+              "id": 18,
+              "count": 2000
+            },
+            {
+              "name": "Jewelry & Accessories",
+              "id": 1509,
+              "count": 537
+            },
+            {
+              "name": "Beauty & Health",
+              "id": 66,
+              "count": 293
+            },
+            {
+              "name": "Home Appliances",
+              "id": 6,
+              "count": 215
+            },
+            {
+              "name": "Watches",
+              "id": 1511,
+              "count": 90
+            },
+            {
+              "name": "Men's Clothing",
+              "id": 100003070,
+              "count": 80
+            },
+            {
+              "name": "Luggage & Bags",
+              "id": 1524,
+              "count": 36
+            },
+            {
+              "name": "Novelty & Special Use",
+              "id": 200000875,
+              "count": 35
+            }
+          ]
+        }
+      },
+      "resultList": [
+        {
+          "itemId": 1005004802418706,
+          "title": "Original Apple iPhone 12 Pro 12pro 6.1'' 6GB ROM 128/256/512GB RAM 5G LTE IOS A14 Bionic Chip 3 12MP Cameras Smart Unlock Phone",
+          "sales": 0,
+          "image": "//ae01.alicdn.com/kf/A11d76c3e77f045f3989c8d15d3e1d711W.jpg",
+          "price": {
+            "pc": 798.89,
+            "app": 798.89
+          },
+          "delivery": {
+            "freeShipping": false,
+            "shippingDisplay": ""
+          }
+        },
+        {
+          "itemId": 1005002599395609,
+          "title": "Original Apple iPhone 11 Pro 5.8\" 4G LTE Face ID 64/256/512GB ROM A13 Bionic Hexa Core IOS Triple rear cameras 12MP Cell Phone",
+          "sales": 5,
+          "image": "//ae01.alicdn.com/kf/S87990ef6b57e44d0bc66c8b400f723cbz.jpg",
+          "price": {
+            "pc": 552,
+            "app": 552
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 2008317512,
+          "title": "Used Original Apple Iphone 4s Factory Unlock Phone Dual core 16GB/32GB/64GB 8MP Camera GPS 3.5'' TouchScreen",
+          "sales": 666,
+          "image": "//ae01.alicdn.com/kf/HTB1r5aAc7fb_uJkSnfoq6z_epXaL.jpg",
+          "price": {
+            "pc": 41.07,
+            "app": 41.07
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005003693047450,
+          "title": "Original Apple iPhone XS CellPhone 5.8\" RAM 4GB ROM 64GB/256GB IOS Smartphone Hexa Core A12 NFC LTE 4G Unlocked Mobile Phone",
+          "sales": 140,
+          "image": "//ae01.alicdn.com/kf/S216fe9abd97d44dd80a86aa4642f54a6j.jpg",
+          "price": {
+            "pc": 287.87,
+            "app": 287.87
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005004789093597,
+          "title": "Unlocked Apple iPhone 11 pro 64GB 256GB 512GB ROM A13 Bionic chip 4G LTE 5.8\" Screen 12MP+12MP Face ID Cell phon",
+          "sales": 1,
+          "image": "//ae01.alicdn.com/kf/S1661154d1fc844f9ba08e6a345252932j.jpg",
+          "price": {
+            "pc": 538.98,
+            "app": 538.98
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005004304638834,
+          "title": "Original Unlocked Apple iPhone 5 3G Mobile Phone Used-85%New 4.0'' 1GB RAM 16GB 32GB 64GB ROM 8MP+1.2MP WiFi GPS IOS SmartpPhone",
+          "sales": 44,
+          "image": "//ae01.alicdn.com/kf/S318cab2a494e4582848166436a3ce866v.jpg",
+          "price": {
+            "pc": 51.94,
+            "app": 51.94
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005003294587749,
+          "title": "Apple iPhone 7 4G Cell Phone 32/128GB/256GB IOS LTE Fingerprint 4.7\"",
+          "sales": 23,
+          "image": "//ae01.alicdn.com/kf/HTB1LB3ir1uSBuNjSsziq6zq8pXaZ.jpg",
+          "price": {
+            "pc": 141.1,
+            "app": 141.1
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005003638551615,
+          "title": "Original Unlocked Apple iphone xs max 4G LTE 4G RAM 64gb/256gb ROM A12 Bionic IOS iphonexsmax",
+          "sales": 33,
+          "image": "//ae01.alicdn.com/kf/S0b882fda6bb741f4a1689be7e74b1483x.png",
+          "price": {
+            "pc": 359.84,
+            "app": 359.84
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005003891185800,
+          "title": "Original Apple iPhone 12 Mini 5G LTE 4GB&64/128/256GB IOS A14 Bionic Hexa Core 5.4'' Dual 12MP Cellphone",
+          "sales": 810,
+          "image": "//ae01.alicdn.com/kf/Sd270d1791e584c1791ea59831b474765K.jpg",
+          "price": {
+            "pc": 440,
+            "app": 440
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005003996185468,
+          "title": "Original Unlocked Cell phone Apple iPhone X 5.8\" 3GB+64GB/256GB 4G LTE A11 CPU Wireless Charge Used Phone",
+          "sales": 817,
+          "image": "//ae01.alicdn.com/kf/S2e34cece0a804f65806ed28f2ed426d7h.jpg",
+          "price": {
+            "pc": 256.96,
+            "app": 256.96
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005003402906273,
+          "title": "Original unlocked Apple iPhone 11 64GB/128GB/256GB 3110mAh dual 12MP camera 6.1 inch screen IOS smartphone LTE iphone11",
+          "sales": 728,
+          "image": "//ae01.alicdn.com/kf/S03f5e5dd8ea0438894a0d8fae2f92120l.png",
+          "price": {
+            "pc": 393.75,
+            "app": 393.75
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 32717223927,
+          "title": "Original Unlocked Apple iPhone SE Cell Phone 4G LTE 4.0' 2GB RAM 16/64GB ROM A9 Dual-core Touch ID Mobile Phone Used iphonese",
+          "sales": 873,
+          "image": "//ae01.alicdn.com/kf/S2788f93209f948909bcbd0e3b1d9b4cbq.png",
+          "price": {
+            "pc": 99,
+            "app": 99
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005004105315487,
+          "title": "Original Apple Iphone 8 8P 8 Plus 3GB RAM 64GB/256GB Hexa Core 12MP 4.7“/5.5” iOS Touch ID 4G LTE Fingerprint Used Phone",
+          "sales": 107,
+          "image": "//ae01.alicdn.com/kf/Sa934aac3e1904312a3abb97e5e963950x.jpg",
+          "price": {
+            "pc": 183.68,
+            "app": 183.68
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005003624973744,
+          "title": "Unlocked Original Apple iPhone XR 6.1\" Liquid Retina Fully LCD Display 4G Lte Apple Smartphone",
+          "sales": 185,
+          "image": "//ae01.alicdn.com/kf/S9bc648823c934501a6d5c4ff4fca1c3de.jpg",
+          "price": {
+            "pc": 280,
+            "app": 280
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005001765341072,
+          "title": "Original Unlocked Apple iPhone X 256GB 64GB 5.8 inch Hexa Core iOS A11 3GB RAM 12MP Dual Back Camera 4G LTE Cellphone Mobile",
+          "sales": 234,
+          "image": "//ae01.alicdn.com/kf/S018bf65a22794d859bde924d525bb593U.jpg",
+          "price": {
+            "pc": 257.4,
+            "app": 257.4
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005003878160137,
+          "title": "Original Apple iPhone 12 Face ID 5G LTE 6.1'' 4GB&64/128/256GB IOS A14 Bionic Hexa Core Dual 12MP Cellphone",
+          "sales": 29,
+          "image": "//ae01.alicdn.com/kf/S0545006d9ffa4a14b51822e2f09e86b0s.jpg",
+          "price": {
+            "pc": 540,
+            "app": 540
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005004181822213,
+          "title": "Original Apple IPhone 4S 3G Mobile Phone Unlocked Used-99%New 3.5'' Touch Screen A5 Dual Core 8MP WIFI GSM WCDMA GPS SmartPhone",
+          "sales": 142,
+          "image": "//ae01.alicdn.com/kf/Sf9853ea2b075449a84ebc2293deeaca5R.jpg",
+          "price": {
+            "pc": 39.06,
+            "app": 39.06
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005002351442707,
+          "title": "Original Apple iPhone XR Face ID 6.1\" 3G RAM 64GB/128GB/256GB ROM 4G Lte Apple Smartphone NFC",
+          "sales": 598,
+          "image": "//ae01.alicdn.com/kf/S3ff418455523443582bd7277194b5ad5r.png",
+          "price": {
+            "pc": 293.88,
+            "app": 293.88
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 32783490100,
+          "title": "Unlocked Apple iPhone 7 Original 2GB RAM 32/128GB/256GB ROM IOS 10 Quad-Core 4G LTE 12.0MPApple Fingerprint touch ID",
+          "sales": 579,
+          "image": "//ae01.alicdn.com/kf/Sc53b52245e5840779a1ffd552b2597f7I.png",
+          "price": {
+            "pc": 144.84,
+            "app": 144.84
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        },
+        {
+          "itemId": 1005001519129399,
+          "title": "Original unlocked Apple iPhone 11 64GB/128GB/256GB 3110mAh dual 12MP camera A13 chip 6.1 inch screen IOS smartphone LTE 4G",
+          "sales": 278,
+          "image": "//ae01.alicdn.com/kf/S9f1daa47d4bd4b51a585aaa7b8e34cbc4.png",
+          "price": {
+            "pc": 399.73,
+            "app": 399.73
+          },
+          "delivery": {
+            "freeShipping": true,
+            "shippingDisplay": "Free shipping"
+          }
+        }
+      ]
+    }
+  }
