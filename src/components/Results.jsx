@@ -1,4 +1,7 @@
+'use client'
+
 import Card from './Card';
+import CardSpinner from './CardSpinner';
 
 export default function Results({ results }) {
   return (
@@ -6,6 +9,7 @@ export default function Results({ results }) {
       {results.map(({item}) => (
         <Card key={item.itemId} result={item} />
       ))}
+      <CardSpinner key={'nextPage'} isNextPage={true} />
     </div>
   );
 }

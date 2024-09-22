@@ -2,10 +2,7 @@ import Image from 'next/image';
 import _get from 'lodash/get';
 import {getItemDetails} from '@/api/getItemDetails';
 
-export async function generateMetadata({ params }, parent) {
-  // read route params
-  // const id = params.id
- 
+export async function generateMetadata({ params }) {
   // fetch data
   const {result} = await getItemDetails(params.id);
   const name = _get(result,['item','title'],'name');
