@@ -1,15 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState,useEffect } from 'react';
+import { useRouter,useParams } from 'next/navigation';
 
 export default function SearchBox() {
   const [search, setSearch] = useState('');
-  const router = useRouter();
+  const router = useRouter();  
+  const params = useParams();
+
+  useEffect(() => {
+    if (params.searchTerm === undefined) {
+      setSearch('');
+    }
+  },[params.searchTerm]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     router.push(`/search/${search}`);
   };
+
   return (
     <form
       className='flex justify-between px-5 max-w-6xl mx-auto'

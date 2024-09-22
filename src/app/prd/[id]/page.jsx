@@ -1,24 +1,25 @@
 import Image from 'next/image';
 import _get from 'lodash/get';
+import {getItemDetails} from '@/api/getItemDetails';
 
-const API_KEY = process.env.X_RapidAPI_Key;
-const API_HOST = process.env.X_rapidapi_host;
+export async function generateMetadata({ params }, parent) {
+  // read route params
+  // const id = params.id
+ 
+  // fetch data
+  const {result} = await getItemDetails(params.id);
+  const name = _get(result,['item','title'],'name');
+  const price = _get(result,['item','sku','def','price'],'0');
+  const priceInt = parseInt(price);
+  const title = name.slice(0,23)+'--' + (priceInt/1000).toFixed() + 'тр.';
+
+  return {
+    title: title
+  }
+}
 
 export default async function MoviePage({ params }) {
-  const itemId = params.id;
-  const res = await fetch(
-    `https://aliexpress-datahub.p.rapidapi.com/item_detail_5?itemId=${itemId}&currency=RUB`,
-    {
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': API_HOST
-      }
-    }
-  );
-
-  const {result} = await res.json();
-  const imgUrl = `https:${_get(result,['item','images',0],'//')}`;
+  const {result,imgUrl} = await getItemDetails(params.id);
 
   return (
     <div className='w-full'>
