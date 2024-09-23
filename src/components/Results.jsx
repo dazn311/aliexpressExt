@@ -5,7 +5,7 @@ import Card from './Card';
 import CardSpinner from './CardSpinner';
 import {getNextItems} from '@/app/actions';
 
-export default function Results({ results,genre }) {
+export default function Results({ results,category }) {
   const [products, setProducts] = useState(results);
   const [page, setPage] = useState(1);
 
@@ -17,7 +17,7 @@ export default function Results({ results,genre }) {
   useEffect(()=>{
     async function getMorePrd() {
       const nextPage = page + 1;
-      const results = await getNextItems(genre,nextPage);
+      const results = await getNextItems(category,nextPage);
       if (results.length > 0) {
         setPage(nextPage);
         setProducts(prev => ([
@@ -28,14 +28,14 @@ export default function Results({ results,genre }) {
     }
 
     if (inView) {
-      getMorePrd();
+      getMorePrd().then(r => console.log(r));
     }
   },[inView]);
 
   return (
     <div className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 max-w-6xl mx-auto py-4'>
-      {products.map(({item}) => (
-        <Card key={item.itemId} result={item} />
+      {(products ?? []).map((item) => (
+        <Card key={item.productId} result={item} />
       ))}
       <CardSpinner ref={ref} key={'nextPage'} inView={inView} />
     </div>

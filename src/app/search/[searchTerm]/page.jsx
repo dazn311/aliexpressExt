@@ -2,17 +2,15 @@ import Results from '@/components/Results';
 import {searchItems} from '@/api/searchItems';
 
 export default async function SearchPage({ params }) {
-  const {result} = await searchItems(params.searchTerm,1);
+  const results = await searchItems(params.searchTerm,1);
 
-  if (result.status.data !== 'success') {
+  if (!results) {
     return (
       <div>
         По этому запросу не найден результат.
       </div>
     );
   }
-
-  const results = result['resultList'];
 
   return (
     <div>

@@ -1,19 +1,16 @@
-import _get from 'lodash/get';
+const BASE_URL = process.env.BASE_URL;
 
-const API_KEY = process.env.X_RapidAPI_Key;
-const API_HOST = process.env.X_rapidapi_host;
-
-export const searchItems = async (seachTerm,page=1) => {
-    const res = await fetch(`https://aliexpress-datahub.p.rapidapi.com/item_search_5?q=${seachTerm}&page=${page}&sort=default&currency=RUB`,{
-      method: 'GET',
-      headers: {
-        'x-rapidapi-key': API_KEY,
-        'x-rapidapi-host': API_HOST
+export const searchItems = async (searchTerm,page=1) => {
+    const res = await fetch(`${BASE_URL}/api/search?category=${searchTerm}&page=${page}`,{
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json"
         }
-      }
-    );
+    });
 
-    return await res.json();
-    // const {result} = await res.json();
-  // return _get(result,['resultList']);
+    if (res.status === 200) {
+        const {content} = await res.json();
+        return content;
+    }
+    return null;
 }

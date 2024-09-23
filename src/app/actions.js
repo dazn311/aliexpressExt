@@ -1,12 +1,12 @@
 'use server'
 import {searchItems} from '@/api/searchItems';
 
-export async function getNextItems(genre,page=1) {
-    const {result} = await searchItems(genre,page);
+export async function getNextItems(searchTerm,page=1) {
+    const results = await searchItems(searchTerm,page);
 
-    if (result?.status?.data !== 'success') {
+    if (!results) {
       return [];
     }
   
-    return result['resultList'];
+    return results;
 }

@@ -8,7 +8,7 @@ import SearchBox from '@/components/SearchBox';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Aliexpress extend',
+  title: 'Ali extend',
   description: 'This is a product database mirror',
 };
 

@@ -4,25 +4,31 @@ import {getItemDetails} from '@/api/getItemDetails';
 
 export async function generateMetadata({ params }) {
   // fetch data
-  const {result} = await getItemDetails(params.id);
-  const name = _get(result,['item','title'],'name');
-  const price = _get(result,['item','sku','def','price'],'0');
-  const priceInt = parseInt(price);
-  const title = name.slice(0,23)+'--' + (priceInt/1000).toFixed() + 'тр.';
+  const result = await getItemDetails(params.id);
+  if (!result) {
+    return 'no data';
+  }
+  const name = _get(result,['title','seoTitle'],'name');
+  const price = _get(result,['prices','originalPrice','minPrice'],0);
+  const title = name.slice(0,23)+'--' + '$' + price.toFixed(1);
 
   return {
-    title: title
+    title: title,
+    description:name,
   }
 }
 
-export default async function MoviePage({ params }) {
-  const {result,imgUrl} = await getItemDetails(params.id);
+export default async function ProductPage({ params }) {
+  const result = await getItemDetails(params.id);
 
+  if (!result) {
+    return 'no data';
+  }
   return (
     <div className='w-full'>
       <div className='p-4 md:pt-8 flex flex-col md:flex-row content-center max-w-6xl mx-auto md:space-x-6'>
         <Image
-          src={imgUrl}
+          src={`https:${_get(result,['images',0,'imgUrl'], '/Rectangle500x300.svg')}`}
           width={500}
           height={300}
           className='rounded-lg'
@@ -31,25 +37,24 @@ export default async function MoviePage({ params }) {
         />
         <div className='p-2'>
           <p className='font-semibold mr-1 text-gray-500'>
-          Продавец: {_get(result,['seller','storeTitle'],'0')}.
+            {_get(result,['store','storeName'],'0')}.
           </p>
           <h2 className='text-lg mb-3 font-bold'>
-            {_get(result,['item','title'],'name')}
+            {_get(result,['title','displayTitle'],'name')}
           </h2>
-          <p className='text-lg mb-3'>wishCount: {_get(result,['item','wishCount'],'0')}</p>
+          <p className='text-md mb-3'>
+            <span className='text-gray-500 text-md mr-1'>sku:</span>
+            {_get(result, ['trace', 'utLogMap', 'sku_id'], '0')}</p>
           <p className='mb-3'>
-            <span className='font-semibold mr-1'>sales:</span>
-            {_get(result,['item','sales'],'0')}
+            <span className='text-gray-500 text-md mr-1'>lunchTime:</span>
+            {(new Date(_get(result,['lunchTime'],'2000-01-01 00:00:00'))).toLocaleDateString()}
           </p>
-          <p className='mb-3'>
-            <span className='font-semibold mr-1'>Rating:</span>
-            {_get(result,['item','sales'],'sales')}
+          <p className='flex items-center text-md'>
+            <span className='text-gray-500 text-md mr-1'>price:</span>
+            {_get(result, ['prices', 'originalPrice', 'formattedPrice'], '0')}
           </p>
-          <p className='flex items-center'>
-          {_get(result,['item','sku','def','price'],'0')}р.
-          </p>
-          <p className='flex items-center'>
-          в наличии: {_get(result,['item','sku','def','quantity'],'0')} шт.
+          <p className='flex items-center text-md'>
+            {/*в наличии: {_get(result,['item','sku','def','quantity'],'0')} шт.*/}
           </p>
         </div>
       </div>
