@@ -14,19 +14,19 @@ export default function Results({ results,genre }) {
     threshold: 0,
   });
 
-  async function getMorePrd() {
-    const nextPage = page + 1;
-    const results = await getNextItems(genre,nextPage);
-    if (results.length > 0) {
-      setPage(nextPage);
-      setProducts(prev => ([
-        ...(prev ? prev : []),
-        ...results
-      ]));
-    }
-  }
-
   useEffect(()=>{
+    async function getMorePrd() {
+      const nextPage = page + 1;
+      const results = await getNextItems(genre,nextPage);
+      if (results.length > 0) {
+        setPage(nextPage);
+        setProducts(prev => ([
+          ...(prev ? prev : []),
+          ...results
+        ]));
+      }
+    }
+
     if (inView) {
       getMorePrd();
     }

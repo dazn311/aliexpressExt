@@ -12,6 +12,7 @@ export default function Card({ result }) {
           width={500}
           height={300}
           className='sm:rounded-t-lg group-hover:opacity-75 transition-opacity duration-300'
+          alt='card'
         />
         <div className='p-2'>
           <p className='line-clamp-2 text-md'>sales: {result.sales}</p>

@@ -27,6 +27,7 @@ export default async function MoviePage({ params }) {
           height={300}
           className='rounded-lg'
           style={{ maxWidth: '100%', height: '100%' }}
+          alt='card'
         />
         <div className='p-2'>
           <p className='font-semibold mr-1 text-gray-500'>
