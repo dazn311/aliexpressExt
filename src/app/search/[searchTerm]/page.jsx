@@ -2,7 +2,7 @@ import Results from '@/components/Results';
 import {searchItems} from '@/api/searchItems';
 
 export default async function SearchPage({ params }) {
-  const {result} = await searchItems(params.searchTerm);
+  const {result} = await searchItems(params.searchTerm,1);
 
   if (result.status.data !== 'success') {
     return (

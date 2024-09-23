@@ -2,7 +2,8 @@ import Results from '@/components/Results';
 import {searchItems} from '@/api/searchItems';
 
 export default async function Home({ searchParams }) {
-  const {result} = await searchItems(searchParams.genre || 'iphone');
+  const genre = searchParams.genre || 'iphone';
+  const {result} = await searchItems(genre,1);
 
   if (result?.status?.data !== 'success') {
     return (
@@ -16,7 +17,7 @@ export default async function Home({ searchParams }) {
 
   return (
     <div>
-      <Results results={results} />
+      <Results results={results} genre={genre} />
     </div>
   );
 }
