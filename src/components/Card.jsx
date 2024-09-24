@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { FiThumbsUp } from 'react-icons/fi';
 import _get from 'lodash/get';
 
-export default function Card({ result }) {
-  const imageSrc = _get(result,['images',0,'imgUrl']);
+export default function Card({ result,category }) {
+  const imageSrc = _get(result,['images',0,'imgUrl']) ?? _get(result,['image','imgUrl']);
   return (
     <div className='group cursor-pointer sm:hover:shadow-slate-400 sm:shadow-md rounded-lg sm:border sm:border-slate-400 sm:m-2 transition-shadow duration-200'>
-      <Link href={`/prd/${result.productId}`}>
+      <Link href={`/prd/${result.productId}?category=${category}`} >
         <Image
           src={imageSrc ? `https:${imageSrc}` : '/Rectangle500x300.svg'}
           width={500}

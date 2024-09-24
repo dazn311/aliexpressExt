@@ -5,12 +5,13 @@ export const searchItems = async (searchTerm,page=1) => {
         method: 'GET',
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        next: { revalidate: 1 }
     });
 
     if (res.status === 200) {
-        const {content} = await res.json();
-        return content;
+        const data = await res.json();
+        return data.content ? data.content : data;
     }
     return null;
 }

@@ -2,9 +2,9 @@ import Image from 'next/image';
 import _get from 'lodash/get';
 import {getItemDetails} from '@/api/getItemDetails';
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params,searchParams }) {
   // fetch data
-  const result = await getItemDetails(params.id);
+  const result = await getItemDetails(params.id,searchParams.category);
   if (!result) {
     return 'no data';
   }
@@ -18,17 +18,22 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export default async function ProductPage({ params }) {
-  const result = await getItemDetails(params.id);
+export default async function ProductPage({ params,searchParams }) {
+  const result = await getItemDetails(params.id,searchParams.category);
 
   if (!result) {
-    return 'no data';
+    return <div className='w-full'>
+            <div className='p-4 md:pt-8 flex flex-col md:flex-row content-center max-w-6xl mx-auto md:space-x-6'>
+              no data
+            </div>
+          </div>;
   }
+  const imageSrc = _get(result,['images',0,'imgUrl']) ?? _get(result,['image','imgUrl']);
   return (
     <div className='w-full'>
       <div className='p-4 md:pt-8 flex flex-col md:flex-row content-center max-w-6xl mx-auto md:space-x-6'>
         <Image
-          src={`https:${_get(result,['images',0,'imgUrl'], '/Rectangle500x300.svg')}`}
+          src={imageSrc ? `https:${imageSrc}` : '/Rectangle500x300.svg'}
           width={500}
           height={300}
           className='rounded-lg'
