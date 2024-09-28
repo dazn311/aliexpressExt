@@ -1,24 +1,18 @@
 import Results from '@/components/Results';
 import {searchItems} from '@/api/searchItems';
+import NoFinePage from '@/components/NoFinePage';
 
-export default async function SearchPage({ params }) {
-  const results = await searchItems(params.searchTerm,1);
+const DEFAULT_PAGE = process.env.DEFAULT_PAGE;
 
-  if (!results) {
+export default async function SearchPage({ params,searchParams }) {
+  const category = searchParams.category || DEFAULT_PAGE;
+  const results = await searchItems({category,searchTerm:params.searchTerm,page:'1'});
+
+  if (!results || results.length === 0) {
     return (
-      <div>
-        По этому запросу не найден результат.
-      </div>
+        <NoFinePage/>
     );
   }
 
-  return (
-    <div>
-      {results &&
-        results.length ===
-        <h1 className='text-center pt-6'>No results found</h1>}
-      {results && <Results results={results} />}
-    </div>
-  );
+  return (<Results results={results} category={'all'} />);
 }
-
