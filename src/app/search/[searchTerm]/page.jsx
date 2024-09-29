@@ -14,5 +14,5 @@ export default async function SearchPage({ params,searchParams }) {
     );
   }
 
-  return (<Results results={results} category={'all'} />);
+  return (<Results results={results} category={category} isSearchable={true} />);
 }

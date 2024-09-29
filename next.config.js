@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode:true,
+  crossOrigin:"use-credentials",
   env:{
-    BASE_URL:process.env.BASE_URL,
-    X_RapidAPI_Key:process.env.X_RapidAPI_Key,
-    X_rapidapi_host:process.env.X_rapidapi_host,
-    DEFAULT_PAGE:process.env.DEFAULT_PAGE,
+    BASE_URL:'http://localhost:3000',
+    X_RAPID_API_KEY:'daza675756c38msh7bf53aadf27b4c2p195d51jsn705d263f4164',
+    X_RAPID_API_HOST:'dazaliexpress-datahub.p.rapidapi.com',
+    DEFAULT_PAGE:'Sneakers',
   },
   experimental: {
     serverActions: {

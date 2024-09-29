@@ -1,12 +1,18 @@
 'use server'
 import {searchItems} from '@/api/searchItems';
+import {revalidatePath} from 'next/cache';
 
 export async function getNextItems(props) {
-    const results = await searchItems(props);
-
-    if (!results) {
-        return null;
+    try {
+        return await searchItems(props);
+    }catch (e) {
+        throw new Error(`${e}`);
     }
-
-    return results;
+    revalidatePath(`/search${props.searchTerm}`,'page');
 }
+
+//if (!results) {
+//         return null;
+//     }
+//
+//     return results;

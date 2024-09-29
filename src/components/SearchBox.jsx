@@ -1,6 +1,6 @@
 'use client';
 
-import { useState,useEffect,useCallback } from 'react';
+import { useState,useEffect } from 'react';
 import { useRouter,useParams,useSearchParams } from 'next/navigation';
 import _has from 'lodash/has';
 import _get from 'lodash/get';
@@ -12,20 +12,18 @@ export default function SearchBox() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (params.searchTerm === undefined) {
-      setSearch('');
+    const searchTerm = params.searchTerm === undefined ? '': params.searchTerm;
+    if (search !== searchTerm) {
+      setSearch(searchTerm);
     }
   },[params.searchTerm]);
 
-  const createQueryString = useCallback(
-      (name= 'string', value= 'string') => {
-        const params = new URLSearchParams(searchParams.toString())
-        params.set(name, value)
+  const createQueryString = (name= 'string', value= 'string') => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set(name, value)
 
-        return params.toString()
-      },
-      [searchParams]
-  )
+    return params.toString()
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     const category = searchParams.get("category")
