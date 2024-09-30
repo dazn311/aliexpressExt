@@ -46,17 +46,18 @@ export default function Results(
     );
   }
 
-    return (
-        <div className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 max-w-6xl mx-auto py-4'>
-        {products.length > 0 && products.map((item,idx) => (
-            <Card key={item.productId + category + idx} category={category} result={item} />
-        ))}
-          {!isSearchable && products.length > 0 &&
-              <CardSpinner
-                  key={'nextPage'}
-                  setProducts={setProducts}
-                  category={category}
-              />}
-      </div>
-  );
+    return (<>
+            <div
+                className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 max-w-6xl mx-auto py-4'>
+                {products.length > 0 && products.map((item, idx) => (
+                    <Card key={item.productId + category + idx} category={category} result={item}/>
+                ))}
+            </div>
+            {!isSearchable && products.length > 0 &&
+                <CardSpinner
+                    key={'nextPage'}
+                    setProducts={setProducts}
+                    category={category}
+                />}
+        </>);
 }
