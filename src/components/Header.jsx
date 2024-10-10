@@ -2,6 +2,7 @@ import Link from 'next/link';
 import MenuItem from './MenuItem';
 import { AiFillHome } from 'react-icons/ai';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
+import { FaFileExcel } from "react-icons/fa6";
 import DarkModeSwitch from './DarkModeSwitch';
 
 const DEFAULT_PAGE = process.env.DEFAULT_PAGE;
@@ -12,6 +13,7 @@ export default function Header() {
             <div className='flex gap-4'>
                 <MenuItem title='home' address={`/?category=${DEFAULT_PAGE}`} Icon={AiFillHome} />
                 <MenuItem title='about' address='/about' Icon={BsFillInfoCircleFill} />
+                <MenuItem title='Xls' address='/xlsx' Icon={FaFileExcel} />
             </div>
             <div className='flex items-center gap-4'>
                 <DarkModeSwitch />
