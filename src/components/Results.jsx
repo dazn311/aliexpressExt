@@ -4,6 +4,8 @@ import Card from './Card';
 import CardSpinner from './CardSpinner';
 import {getNextItems} from "@/app/actions";
 import Image from "next/image";
+import Navbar from "@/components/Navbar";
+import SearchBox from "@/components/SearchBox";
 
 export default function Results(
   {
@@ -47,6 +49,8 @@ export default function Results(
   }
 
     return (<>
+            <Navbar />
+            <SearchBox />
             <div
                 className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 max-w-6xl mx-auto py-4'>
                 {products.length > 0 && products.map((item, idx) => (
