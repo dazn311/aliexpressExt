@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import Image from 'next/image';
 import { useInView } from "react-intersection-observer";
 import {getNextItems} from '@/app/actions';
+import GlobalConstants from "@/store/globalConstants";
 
 export default function CardSpinner(props)  {
     const {setProducts,category} = props;
@@ -16,11 +17,19 @@ export default function CardSpinner(props)  {
     });
 
     useEffect(()=>{
+        setIsShowImg(prev=> ({...prev,[category]:true}));
+    },[category]);
+
+    useEffect(()=>{
         if (!inView) {
-            setIsShowImg(prev=> ({...prev,[category]:1}));
+            // setIsShowImg(prev=> ({...prev,[category]:true}));
             return;
         }
         const nextPage =  (initCategory.current[category] ?? 1) + 1;
+        if (GlobalConstants.MAX_PAGES_LENGTH < nextPage) {
+            setIsShowImg(prev=> ({...prev,[category]:false}));
+            return;//already loaded this page;
+        }
         if (initCategory.current[category] === nextPage) return;//already loaded this page;
 
         initCategory.current = {...initCategory.current,[category]:nextPage};
@@ -28,10 +37,10 @@ export default function CardSpinner(props)  {
             .then(res => {
                 // console.log('[26 CardSpinner] 🔸res :', JSON.stringify(res));
                 if (Array.isArray(res) && res.length === 0) {
-                    setIsShowImg(prev=> ({...prev,[category]:0}));
+                    setIsShowImg(prev=> ({...prev,[category]:false}));
                     return;
                 }
-                setIsShowImg(prev=> ({...prev,[category]:nextPage}));
+
                 setProducts(prev => ([
                     ...(!!prev && inView && nextPage > 1 ? prev : []),
                     ...res
@@ -49,6 +58,7 @@ export default function CardSpinner(props)  {
                 className='sm:rounded-t-lg group-hover:opacity-75 transition-opacity duration-300 mx-auto'
                 alt='loading...'
             />}
-
+        {JSON.stringify(isShowImg, null, 2)}
+        <div>{category}</div>
     </div>
 }
