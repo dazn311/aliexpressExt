@@ -52,6 +52,12 @@ const saveFile = ({ file, onSuccess }) => {
 
     // STEP 3: Create worksheet with rows; Add worksheet to workbook
     const ws = XLSX.utils.aoa_to_sheet([row]);
+
+    //Here s = start, r = row, c=col, e= end
+    ws["!merges"] = [
+        { s: { r: 1, c: 0 }, e: { r: 2, c: 0 } },{ s: { r: 3, c: 0 }, e: { r: 4, c: 0 } },
+    ];
+
     XLSX.utils.book_append_sheet(wb, ws, "readme demo");
 
     // STEP 4: Write Excel file to browser
