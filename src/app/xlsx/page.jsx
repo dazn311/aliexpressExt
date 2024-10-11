@@ -6,13 +6,14 @@ import {message} from 'antd';
 import XLSX from 'xlsx-js-style';
 import UpLoadXlsx from "@/components/UpLoadXlsx";
 import {fileReader} from "@/utils/fileReader";
+import {getOS} from "@/utils/getOS";
 
 
 export default function XlsxPage({}) {
     const [fileD, setFileD] = useState({});
     const upLoadToWebRef = useRef(()=>{});
     //TODO: test Windows or Mac OS;
-    const checkValue = useRef({utf8:true});
+    const checkValue = useRef({utf8:getOS() !== 'Windows'});
 
     const saveFile = ({ file, onSuccess }) => {
         // STEP 1: Create a new workbook
@@ -69,7 +70,8 @@ export default function XlsxPage({}) {
                 return true;
         }
     }
-    console.log('62 fileD:',fileD)
+    console.log('62 fileD:',fileD);
+    console.log('46 getOS():',getOS());
     return (
         <div className='max-w-6xl mx-auto p-3 space-y-4'>
             <h1 className='text-2xl font-medium text-amber-600 text-center'>Excel Page</h1>

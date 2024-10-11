@@ -14,7 +14,7 @@ export default function UpLoadXlsx({data,checkValue,upLoadToWebRef}) {
         })
             .then(data => {
                 onSuccess("ok");
-                console.log('[15 onChangeHandler] data:',data)
+                // console.log('[15 onChangeHandler] data:',data)
             })
             .catch(e => {
                 onSuccess("ok");
