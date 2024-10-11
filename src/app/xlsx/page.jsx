@@ -4,6 +4,7 @@ import React,{useState,useRef} from 'react';
 import XLSX from 'xlsx-js-style';
 import UpLoadXlsx from "@/components/UpLoadXlsx";
 import {getOS} from "@/utils/getOS";
+import TablesXlsx from "@/components/TablesXlsx";
 
 
 export default function XlsxPage({}) {
@@ -13,15 +14,17 @@ export default function XlsxPage({}) {
 
     // 1.Step: read from user's file for upload to form;step.1
     upLoadToWebRef.current = (fileData) => {
-        console.log('46 fileData:',fileData);
+        // console.log('46 fileData:',fileData);
         setFileD(prev=>({...prev, ...fileData}));
     }
 
-    // console.log('62 fileD:',fileD);
+    console.log('21 fileD:',fileD);
+    // console.log('22 checkValue:',checkValue.current);
     return (
-        <div className='max-w-6xl mx-auto p-3 space-y-4'>
-            <h1 className='text-2xl font-medium text-amber-600 text-center'>Excel Page</h1>
+        <div className='max-w-6xl mx-auto p-3 space-y-4 '>
+            <h1 className='text-2xl font-medium text-amber-600 text-center print:hidden'>Excel Page</h1>
             <UpLoadXlsx checkValue={checkValue} upLoadToWebRef={upLoadToWebRef} data={props}/>
+            <TablesXlsx fileD={fileD} />
         </div>
     );
 }
@@ -29,22 +32,9 @@ export default function XlsxPage({}) {
 const props = {
     name: 'file',
     multiple: true,
-    // actions: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
-    // onChange(info) {
-        // const {status} = info.file;//removed
-        // console.log('83 status:',status)
-        // if (status !== 'uploading') {
-        //     // console.log(info.file, info.fileList);
-        //     console.log('86 fileList: ', info.fileList);
-        // }
-        // if (status === 'done') {
-        //     message.success(`${info.file.name} file uploaded successfully.`);
-        // } else if (status === 'error') {
-        //     message.error(`${info.file.name} file upload failed.`);
-        // }
-    // },
+    className: 'print:hidden',
     onDrop(e) {
-        console.log('Dropped files', e.dataTransfer.files);
+        console.log('Dropped files size', e.dataTransfer.files?.size);
     },
 };
 
@@ -67,3 +57,18 @@ const saveFile = ({ file, onSuccess }) => {
     // STEP 4: Write Excel file to browser
     XLSX.writeFile(wb, "xlsx-js-style-demo.xlsx");
 }
+
+// actions: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
+// onChange(info) {
+// const {status} = info.file;//removed
+// console.log('83 status:',status)
+// if (status !== 'uploading') {
+//     // console.log(info.file, info.fileList);
+//     console.log('86 fileList: ', info.fileList);
+// }
+// if (status === 'done') {
+//     message.success(`${info.file.name} file uploaded successfully.`);
+// } else if (status === 'error') {
+//     message.error(`${info.file.name} file upload failed.`);
+// }
+// },

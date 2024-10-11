@@ -1,0 +1,11 @@
+.table_resize {
+  background-color: white;
+  color: black;
+  border-collapse: collapse;
+  border: 2px solid grey;
+  font-size: 12px;
+  width: 900px;
+  tr {
+    border-bottom: 1px solid grey;
+  }
+}
