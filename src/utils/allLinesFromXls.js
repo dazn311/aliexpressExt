@@ -1,5 +1,4 @@
 import XLSX from 'xlsx-js-style';
-import helpers from "@/utils/allLinesFromXlsHelpers";
 // import _isObject from 'lodash/isObject';
 
 /**
@@ -16,9 +15,6 @@ export function allLinesFromXls(
         cellText: true,//Generate formatted text to the .w field
         cellDates:true,
         dateNF:'m/d/yy',//Override default date format (code 14)
-        // dateNF:'yyyy-mm-dd',//Override default date format (code 14)
-        // cellHTML: false,
-        // FS: '.', //Field Separator (“Delimiter” override)
         cellNF: true,//Save number format string to the .z field
         raw: true
     });
@@ -55,10 +51,14 @@ export function allLinesFromXls(
         return accObj;
     },{fileDataObj: {},columns:{},header:null,headers:[],colSpan:0});
 
-    const columnsKeyArr = Object.keys(worksheetsObj['columns']);
+    const columnsKeyArr = Object.keys(worksheetsObj['columns']).sort((a, b) => {
+        if(a < b) { return -1; }
+        if(a > b) { return 1; }
+        return 0;
+    });
     const [startHead] = worksheetsObj['headers'];
     const fileData = Object.keys(worksheetsObj['fileDataObj'])
-        .filter(key => parseInt(key) >= parseInt(startHead))
+        .filter(key => Object.keys(worksheetsObj['fileDataObj'][key] ?? {}).length > 0 && parseInt(key) >= parseInt(startHead))
         .map(key => worksheetsObj['fileDataObj'][key]);
 return {...worksheetsObj,fileData: fileData,dataLines: null,fileName: '',columnsKeyArr};
 
@@ -71,6 +71,8 @@ function stylesHelper(obj={},columns={},isBold=false) {
         ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length } }
         : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true } };
 }
+
+//rowspan="2"
 
 // const rowForSave = [
 //     { v: "Courier: 24", t: "s", s: { font: { name: "Courier", sz: 24 } } },

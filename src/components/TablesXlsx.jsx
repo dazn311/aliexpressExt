@@ -40,8 +40,8 @@ function TrLine({fObj = {}, idx = 0,columnsKeyArr=[]}) {
       columnsKeyArr.map((key, index) => {
         const bold = _get(fObj,[key,'s','font','bold'],false) ? {fontWeight: 'bold'}: {};
         const style = columnsKeyArr.length === index +1 ? {} :{borderRight: '1px solid grey'};
-        const value = !!fObj[key] ? valueOf(fObj[key]) : '';
-        return (<td key={`${value + key}-${index}-${idx}`} style={{...style,...bold, padding: 4}}>
+        const value = !!fObj[key] ? valueOf(fObj[key]) : ' ';
+        return (<td key={`${value + key}-${index}-${idx}`} data-col={key} style={{...style,...bold, padding: 4}}>
               <div contentEditable={true} data-column={key}>{value}</div>
             </td>
         )
@@ -51,7 +51,7 @@ function TrLine({fObj = {}, idx = 0,columnsKeyArr=[]}) {
 }
 
 function valueOf(obj) {
-  switch (obj['t']) {
+  switch (obj?.t) {
     case 's':
       return obj['v'];
     case 'n':
@@ -67,7 +67,7 @@ function valueOf(obj) {
       // date.setDate(date.getDate() + 1);
       // return date.toLocaleDateString('ru-RU');
     default:
-      return obj['v'];
+      return ' ';
   }
 }
 import {Table} from 'antd';
