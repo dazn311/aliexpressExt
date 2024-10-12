@@ -1,4 +1,5 @@
 import XLSX from 'xlsx-js-style';
+import _get from 'lodash/get';
 // import _isObject from 'lodash/isObject';
 
 /**
@@ -26,8 +27,6 @@ export function allLinesFromXls(
     const [startHead] = worksheetsObj['headers'];
     const fileData = fileDataHelper(worksheetsObj,startHead);
 
-    debugger
-
 return {
         ...worksheetsObj,
         fileData: fileData,
@@ -54,22 +53,46 @@ function columnsKeyHelper(worksheetsObj={}) {
     });
 }
 
-function stylesHelper(obj={},columns={},isBold=false) {
+function stylesHelper(obj={},columns={},isBold=false,merge= {}) {
     return Object.keys(obj).length === 0
-        ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length } }
-        : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true } };
+        ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length } ,merge}
+        : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true } ,merge};
+}
+
+//Here s = start, r = row, c=col, e= end
+// const merge = {
+//     "s": { "c": 0,  "r": 6  },
+//     "e": {  "c": 0, "r": 7  }
+// };
+function mergeParse(worksheet) {
+    return (worksheet['!merges'] ?? []).reduce((acc,merge) => {
+        const sc = _get(merge, ['s','c'],0);
+        const startCol = String.fromCharCode(sc + 65);
+        const startRow = _get(merge, ['s','r'],0) +1;
+        const ec = _get(merge, ['e','c'],0);
+        const endCol = String.fromCharCode(ec + 65);
+        const endRow = _get(merge, ['e','r'],0) +1;
+
+        if (endRow > startRow) {
+            acc[`${startCol}${startRow}`] = {rowSpan:endRow - startRow +1};
+            acc[`${endCol}${endRow}`] = {delete:true};
+        }else if (ec > sc) {
+            acc[`${startCol}${startRow}`] = {colSpan:ec - sc +1};
+            acc[`${endCol}${endRow}`] = {delete:true};
+        }
+        return acc;
+    },{});
 }
 
 function worksheetsParse(worksheet) {
+    const merges  = mergeParse(worksheet);
+
     return Object.keys(worksheet).filter(worksheetKey/*A5;A7...*/ => {
         return !/!/.test(worksheetKey);
     }).reduce((accObj,key,idx)=> {
         const [,c,r] = /([A-Z])(\d+)/.exec(key);
         accObj['columns'][c] = c;
 
-        if (!accObj['fileDataObj'][r]) {
-            accObj['fileDataObj'][r] = {};
-        }
         let isBold = accObj['headers'].includes(r);
         const value = worksheet[key]?.v;
         if (/ФИО/.test(value) || /^№$/.test(value)) {
@@ -77,18 +100,24 @@ function worksheetsParse(worksheet) {
             isBold = true;
         }
 
-        worksheet[key]['s'] = stylesHelper(accObj['fileDataObj'],accObj['columns'],isBold);
-        accObj['fileDataObj'][r] = {...accObj['fileDataObj'][r], [c]:worksheet[key]};
+        if (merges[key] !== 'delete') {
+            if (!accObj['fileDataObj'][r]) {
+                accObj['fileDataObj'][r] = {};
+            }
+            worksheet[key]['s'] = stylesHelper(accObj['fileDataObj'],accObj['columns'],isBold,merges[key]);
+            accObj['fileDataObj'][r] = {...accObj['fileDataObj'][r], [c]:worksheet[key]};
 
-        if (accObj['fileDataObj'][idx] === undefined) {
-            accObj['fileDataObj'][idx] = {};
+            if (accObj['fileDataObj'][idx] === undefined) {
+                accObj['fileDataObj'][idx] = {};//isSkip:true
+            }
         }
+
         if (!accObj['header'] && !!worksheet[key]) {
             accObj['header'] = worksheet[key];
         }
 
         return accObj;
-    },{fileDataObj: {},columns:{},header:null,headers:[],colSpan:0});
+    },{fileDataObj: {},columns:{},header:null,headers:[],colSpan:0,merges});
 }
 
 //rowspan="2"

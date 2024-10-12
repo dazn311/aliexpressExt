@@ -38,10 +38,20 @@ function TrLine({fObj = {}, idx = 0,columnsKeyArr=[]}) {
   return (<tr >
     {
       columnsKeyArr.map((key, index) => {
+        const merge = _get(fObj,[key,'s','merge'], {});
+
+        if (fObj[key] === undefined || !!merge.delete) return null;
+        // if (merge.delete) return null;
+
         const bold = _get(fObj,[key,'s','font','bold'],false) ? {fontWeight: 'bold'}: {};
         const style = columnsKeyArr.length === index +1 ? {} :{borderRight: '1px solid grey'};
         const value = !!fObj[key] ? valueOf(fObj[key]) : ' ';
-        return (<td key={`${value + key}-${index}-${idx}`} data-col={key} style={{...style,...bold, padding: 4}}>
+        return (<td
+                key={`${value + key}-${index}-${idx}`}
+                data-col={key}
+                style={{...style,...bold, padding: 4}}
+                {...merge}
+            >
               <div contentEditable={true} data-column={key}>{value}</div>
             </td>
         )
