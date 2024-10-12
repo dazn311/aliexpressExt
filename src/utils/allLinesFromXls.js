@@ -35,8 +35,14 @@ export function allLinesFromXls(
         if (!accObj['fileDataObj'][r]) {
             accObj['fileDataObj'][r] = {};
         }
+        let isBold = accObj['headers'].includes(r);
+        const value = worksheet[key]?.v;
+        if (/ФИО/.test(value) || /^№$/.test(value)) {
+            accObj['headers'].push(r);
+            isBold = true;
+        }
 
-        worksheet[key]['s'] = stylesHelper(accObj['fileDataObj'],accObj['columns']);
+        worksheet[key]['s'] = stylesHelper(accObj['fileDataObj'],accObj['columns'],isBold);
         accObj['fileDataObj'][r] = {...accObj['fileDataObj'][r], [c]:worksheet[key]};
 
         if (accObj['fileDataObj'][idx] === undefined) {
@@ -45,21 +51,25 @@ export function allLinesFromXls(
         if (!accObj['header'] && !!worksheet[key]) {
             accObj['header'] = worksheet[key];
         }
+
         return accObj;
-    },{fileDataObj: {},columns:{},header:null});
+    },{fileDataObj: {},columns:{},header:null,headers:[],colSpan:0});
 
     const columnsKeyArr = Object.keys(worksheetsObj['columns']);
-    const fileData = Object.values(worksheetsObj['fileDataObj']);
+    const [startHead] = worksheetsObj['headers'];
+    const fileData = Object.keys(worksheetsObj['fileDataObj'])
+        .filter(key => parseInt(key) >= parseInt(startHead))
+        .map(key => worksheetsObj['fileDataObj'][key]);
 return {...worksheetsObj,fileData: fileData,dataLines: null,fileName: '',columnsKeyArr};
 
 }
 
 const fontName = 'Times New Roman';
 
-function stylesHelper(obj={},columns={}) {
+function stylesHelper(obj={},columns={},isBold=false) {
     return Object.keys(obj).length === 0
-        ? { font: { name: fontName, bold: true, sz: 18,colSpan:Object.keys(columns).length } }
-        : { font: { name: fontName, sz: 11 },alignment: { wrapText: true } };
+        ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length } }
+        : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true } };
 }
 
 // const rowForSave = [

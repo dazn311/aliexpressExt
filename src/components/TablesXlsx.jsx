@@ -1,4 +1,4 @@
-// import _get from 'lodash/get';
+import _get from 'lodash/get';
 import './tablesXlsx.scss';
 
 export default function TablesXlsx({ fileD={} }) {
@@ -24,7 +24,7 @@ export default function TablesXlsx({ fileD={} }) {
               </th>
             </tr>
             {
-              fileData.map((fObj, idx) => (<TrLine key={fObj['A'] + idx} columnsKeyArr={columnsKeyArr} idx={idx} fObj={fObj}/>))
+              fileData.map((fObj, idx) => (<TrLine key={Object.values(fObj).join(';') + idx} columnsKeyArr={columnsKeyArr} idx={idx} fObj={fObj}/>))
             }
             </tbody>
           </table>
@@ -35,21 +35,19 @@ export default function TablesXlsx({ fileD={} }) {
 }
 
 function TrLine({fObj = {}, idx = 0,columnsKeyArr=[]}) {
-
-  return !!idx
-      ? (<tr >
-        {
-          columnsKeyArr.map((key, index) => {
-            const style = columnsKeyArr.length === index +1 ? {} :{borderRight: '1px solid grey'};
-            const value = !!idx && !!fObj[key] ? valueOf(fObj[key]) : '';
-            return (<td key={`${value + key}-${index}-${idx}`} style={{...style, padding: 4}}>
+  return (<tr >
+    {
+      columnsKeyArr.map((key, index) => {
+        const bold = _get(fObj,[key,'s','font','bold'],false) ? {fontWeight: 'bold'}: {};
+        const style = columnsKeyArr.length === index +1 ? {} :{borderRight: '1px solid grey'};
+        const value = !!fObj[key] ? valueOf(fObj[key]) : '';
+        return (<td key={`${value + key}-${index}-${idx}`} style={{...style,...bold, padding: 4}}>
               <div contentEditable={true} data-column={key}>{value}</div>
             </td>
-          )
-          })
-        }
-      </tr>)
-      : null;
+        )
+      })
+    }
+  </tr>);
 }
 
 function valueOf(obj) {
@@ -59,8 +57,12 @@ function valueOf(obj) {
     case 'n':
       return obj['w'];
     case 'd':
-      return obj['w'];
-      // const date = obj['w'];
+      // return obj['w'];
+      const date = obj['w'];
+      const [m,d,yy] = date.split('/');
+      const mo = m.length === 2 ? m : `0${m}`;
+      const day = d.length === 2 ? d : `0${d}`;
+      return `${day}.${mo}.${yy}`;
       // const timezone = new Date().getTimezoneOffset();//-180
       // date.setDate(date.getDate() + 1);
       // return date.toLocaleDateString('ru-RU');
