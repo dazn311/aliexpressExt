@@ -15,9 +15,7 @@ export default function UpLoadXlsx({data,checkValue,upLoadToWebRef}) {
             fileName: fileName,
         })
             .then(data => {
-                upLoadToWebRef.current({
-                    [uid]:{fileData: data, dataLines: null, fileName: null}
-                });
+                upLoadToWebRef.current({[uid]:data});
                 onSuccess("ok");
             })
             .catch(e => {

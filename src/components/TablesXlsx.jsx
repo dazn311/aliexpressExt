@@ -7,7 +7,7 @@ export default function TablesXlsx({ fileD={} }) {
   return (
     <div className='group cursor-pointer sm:m-2'>
       {
-        fileDataArr.map(({fileData}) => (<div className='p-2'>
+        fileDataArr.map(({fileData,columnsKeyArr,header},idx) => (<div key={'tables_' + idx} className='p-2'>
           <table
               cellPadding={"0"}
               cellSpacing={"0"}
@@ -17,15 +17,14 @@ export default function TablesXlsx({ fileD={} }) {
             <tbody>
             <tr >
               <th
-                  colSpan={/*set over btn*/Object.keys(fileData[0]).length}
+                  colSpan={/*set over btn*/columnsKeyArr.length}
                   style={{fontSize/*set over btn*/: 18,fontWeight: 500,paddingBottom:10,paddingTop:10}}
               >
-                <div contentEditable={true}>{fileData[0]['A']}</div>
-
+                <div contentEditable={true}>{valueOf(header)}</div>
               </th>
             </tr>
             {
-              fileData.map((fObj, idx) => (<TrLine key={fObj['A'] + idx} idx={idx} fObj={fObj}/>))
+              fileData.map((fObj, idx) => (<TrLine key={fObj['A'] + idx} columnsKeyArr={columnsKeyArr} idx={idx} fObj={fObj}/>))
             }
             </tbody>
           </table>
@@ -35,18 +34,16 @@ export default function TablesXlsx({ fileD={} }) {
   );
 }
 
-function TrLine({fObj = {}, idx = 0}) {
-  const rows = Object.keys(fObj);
+function TrLine({fObj = {}, idx = 0,columnsKeyArr=[]}) {
+
   return !!idx
       ? (<tr >
         {
-          rows.map((key, index) => {
-            const style = rows.length === index +1 ? {} :{borderRight: '1px solid grey'};
-            const value = !!index
-                ? fObj[key]
-                : !!fObj['B'] ? fObj[key] : '';
-            return (<td key={fObj[key] + index} style={{...style, padding: 4}}>
-              <div contentEditable={true}>{value}</div>
+          columnsKeyArr.map((key, index) => {
+            const style = columnsKeyArr.length === index +1 ? {} :{borderRight: '1px solid grey'};
+            const value = !!idx && !!fObj[key] ? valueOf(fObj[key]) : '';
+            return (<td key={`${value + key}-${index}-${idx}`} style={{...style, padding: 4}}>
+              <div contentEditable={true} data-column={key}>{value}</div>
             </td>
           )
           })
@@ -55,6 +52,22 @@ function TrLine({fObj = {}, idx = 0}) {
       : null;
 }
 
+function valueOf(obj) {
+  switch (obj['t']) {
+    case 's':
+      return obj['v'];
+    case 'n':
+      return obj['w'];
+    case 'd':
+      return obj['w'];
+      // const date = obj['w'];
+      // const timezone = new Date().getTimezoneOffset();//-180
+      // date.setDate(date.getDate() + 1);
+      // return date.toLocaleDateString('ru-RU');
+    default:
+      return obj['v'];
+  }
+}
 import {Table} from 'antd';
 // const fObj = fileDataArr[0].fileData[0];
 // const fKeys = Object.keys(fObj ?? {});

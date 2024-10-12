@@ -1,11 +1,12 @@
 import XLSX from 'xlsx-js-style';
+import helpers from "@/utils/allLinesFromXlsHelpers";
 // import _isObject from 'lodash/isObject';
 
 /**
  * 2.1.Step: from form to tab, when click save;
  * usage in fileReader;
  * @param {ArrayBuffer} arraybuffer - ArrayBuffer(5967);
- * @returns {Array<Object>} Array<Object>
+ * @returns {Object} Object
  */
 export function allLinesFromXls(
     arraybuffer,//ArrayBuffer(5967);
@@ -14,57 +15,76 @@ export function allLinesFromXls(
         type: "buffer", //'base64' | 'binary' | 'buffer' | 'file' | 'array' | 'string';
         cellText: true,//Generate formatted text to the .w field
         cellDates:true,
-        dateNF:'yyyy-mm-dd',//Override default date format (code 14)
+        dateNF:'m/d/yy',//Override default date format (code 14)
+        // dateNF:'yyyy-mm-dd',//Override default date format (code 14)
         // cellHTML: false,
         // FS: '.', //Field Separator (“Delimiter” override)
         cellNF: true,//Save number format string to the .z field
-        raw: false
+        raw: true
     });
 
     const firstSheetName/*:string*/ = workbook.SheetNames[0];
     const worksheet/*:Worksheet*/ = workbook.Sheets[firstSheetName];
-    const rows = XLSX.utils.sheet_to_json(worksheet, {
-            raw: true,
-            defval: null,
-            header:headerArr(worksheet)
-        }); //'raw: false' for read format 4/29/26;
 
-    return rows.map(formatData);
-    // return rows.map(row => _isObject(row) ? Object.values(row).map(formatData) : []);
-}
+    const worksheetsObj = Object.keys(worksheet).filter(worksheetKey/*A5;A7...*/ => {
+        return !/!/.test(worksheetKey);
+    }).reduce((accObj,key,idx)=> {
+        const [,c,r] = /([A-Z])(\d+)/.exec(key);
+        accObj['columns'][c] = c;
 
-function headerArr(worksheet) {
-    const [,rangeF] = /^\w+:([A-Z])\d+.$/.exec(worksheet["!ref"]);
-    const last = rangeF.charCodeAt(0) - 65 +1;
-    return [...Array(last).fill('').map((v,idx) => String.fromCharCode(idx + 65))];
-}
-
-function formatData(row) {
-    const rowKeysArr = Object.keys(row ?? {});
-    return rowKeysArr.reduce((acc, key) => {
-        switch (typeof row[key]) {
-            case 'string':
-                acc[key] = row[key];
-                break;
-            case 'number':
-                acc[key] = row[key];
-                break;
-            case 'object':
-                if (!row[key]) {
-                    acc[key] = null;
-                } else {
-                    const date = row[key];
-                    // const timezone = new Date().getTimezoneOffset();//-180
-                    date.setDate(date.getDate() + 1);
-                    acc[key] = date.toLocaleDateString('ru-RU');
-                }
-                break;
-            default:
-                acc[key] = null;
+        if (!accObj['fileDataObj'][r]) {
+            accObj['fileDataObj'][r] = {};
         }
-        return acc;
-    },{});
+
+        worksheet[key]['s'] = stylesHelper(accObj['fileDataObj'],accObj['columns']);
+        accObj['fileDataObj'][r] = {...accObj['fileDataObj'][r], [c]:worksheet[key]};
+
+        if (accObj['fileDataObj'][idx] === undefined) {
+            accObj['fileDataObj'][idx] = {};
+        }
+        if (!accObj['header'] && !!worksheet[key]) {
+            accObj['header'] = worksheet[key];
+        }
+        return accObj;
+    },{fileDataObj: {},columns:{},header:null});
+
+    const columnsKeyArr = Object.keys(worksheetsObj['columns']);
+    const fileData = Object.values(worksheetsObj['fileDataObj']);
+return {...worksheetsObj,fileData: fileData,dataLines: null,fileName: '',columnsKeyArr};
+
 }
+
+const fontName = 'Times New Roman';
+
+function stylesHelper(obj={},columns={}) {
+    return Object.keys(obj).length === 0
+        ? { font: { name: fontName, bold: true, sz: 18,colSpan:Object.keys(columns).length } }
+        : { font: { name: fontName, sz: 11 },alignment: { wrapText: true } };
+}
+
+// const rowForSave = [
+//     { v: "Courier: 24", t: "s", s: { font: { name: "Courier", sz: 24 } } },
+//     { v: "bold & color", t: "s", s: { font: { bold: true, color: { rgb: "FF0000" } } } },
+//     { v: "fill: color", t: "s", s: { fill: { fgColor: { rgb: "E9E9E9" } } } },
+//     { v: "line\nbreak", t: "s", s: { alignment: { wrapText: true } } },
+// ];
+
+// const worksheetsObj = Object.keys(worksheet).filter(worksheetKey => {
+//     return !/!/.test(worksheetKey);
+// }).reduce((accObj,key)=> {
+//     // accObj[key] = /d/.test(worksheet[key].t) ? '':'';
+//     accObj[key] = worksheet[key];
+//    return accObj;
+// },{});
+
+// const rows = XLSX.utils.sheet_to_json(worksheet, {
+//         raw: true,
+//         defval: null,
+//         header:helpers.headerArr(worksheet)
+//     }); //'raw: false' for read format 4/29/26;
+//
+// return rows.map(helpers.formatData);
+// return rows.map(row => _isObject(row) ? Object.values(row).map(formatData) : []);
 
 // return rows.map(row => {
 //     const res = Object.values(row);
