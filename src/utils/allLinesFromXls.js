@@ -21,8 +21,47 @@ export function allLinesFromXls(
 
     const firstSheetName/*:string*/ = workbook.SheetNames[0];
     const worksheet/*:Worksheet*/ = workbook.Sheets[firstSheetName];
+    const worksheetsObj = worksheetsParse(worksheet);
+    const columnsKeyArr = columnsKeyHelper(worksheetsObj);
+    const [startHead] = worksheetsObj['headers'];
+    const fileData = fileDataHelper(worksheetsObj,startHead);
 
-    const worksheetsObj = Object.keys(worksheet).filter(worksheetKey/*A5;A7...*/ => {
+    debugger
+
+return {
+        ...worksheetsObj,
+        fileData: fileData,
+        dataLines: null,
+        fileName: '',
+        columnsKeyArr
+    };
+
+}
+
+const fontName = 'Times New Roman';
+
+function fileDataHelper(worksheetsObj={},startHead='0') {
+    return Object.keys(worksheetsObj['fileDataObj'])
+        .filter(key => Object.keys(worksheetsObj['fileDataObj'][key] ?? {}).length > 0 && parseInt(key) >= parseInt(startHead))
+        .map(key => worksheetsObj['fileDataObj'][key]);
+}
+
+function columnsKeyHelper(worksheetsObj={}) {
+    return Object.keys(worksheetsObj['columns']).sort((a, b) => {
+        if(a < b) { return -1; }
+        if(a > b) { return 1; }
+        return 0;
+    });
+}
+
+function stylesHelper(obj={},columns={},isBold=false) {
+    return Object.keys(obj).length === 0
+        ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length } }
+        : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true } };
+}
+
+function worksheetsParse(worksheet) {
+    return Object.keys(worksheet).filter(worksheetKey/*A5;A7...*/ => {
         return !/!/.test(worksheetKey);
     }).reduce((accObj,key,idx)=> {
         const [,c,r] = /([A-Z])(\d+)/.exec(key);
@@ -50,26 +89,6 @@ export function allLinesFromXls(
 
         return accObj;
     },{fileDataObj: {},columns:{},header:null,headers:[],colSpan:0});
-
-    const columnsKeyArr = Object.keys(worksheetsObj['columns']).sort((a, b) => {
-        if(a < b) { return -1; }
-        if(a > b) { return 1; }
-        return 0;
-    });
-    const [startHead] = worksheetsObj['headers'];
-    const fileData = Object.keys(worksheetsObj['fileDataObj'])
-        .filter(key => Object.keys(worksheetsObj['fileDataObj'][key] ?? {}).length > 0 && parseInt(key) >= parseInt(startHead))
-        .map(key => worksheetsObj['fileDataObj'][key]);
-return {...worksheetsObj,fileData: fileData,dataLines: null,fileName: '',columnsKeyArr};
-
-}
-
-const fontName = 'Times New Roman';
-
-function stylesHelper(obj={},columns={},isBold=false) {
-    return Object.keys(obj).length === 0
-        ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length } }
-        : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true } };
 }
 
 //rowspan="2"
