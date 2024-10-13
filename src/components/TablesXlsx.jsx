@@ -7,7 +7,7 @@ export default function TablesXlsx({ fileD={} }) {
   return (
     <div className='group cursor-pointer sm:m-2'>
       {
-        fileDataArr.map(({fileData,columnsKeyArr,header},idx) => (<div key={'tables_' + idx} className='p-2'>
+        fileDataArr.map(({fileData,columnsKeyArr,title,headers},idx) => (<div key={'tables_' + idx} className='p-2'>
           <table
               cellPadding={"0"}
               cellSpacing={"0"}
@@ -20,11 +20,19 @@ export default function TablesXlsx({ fileD={} }) {
                   colSpan={/*set over btn*/columnsKeyArr.length}
                   style={{fontSize/*set over btn*/: 18,fontWeight: 500,paddingBottom:10,paddingTop:10}}
               >
-                <div contentEditable={true}>{valueOf(header)}</div>
+                <div contentEditable={true}>{valueOf(title)}</div>
               </th>
             </tr>
             {
-              fileData.map((fObj, idx) => (<TrLine key={Object.values(fObj).join(';') + idx} columnsKeyArr={columnsKeyArr} idx={idx} fObj={fObj}/>))
+              fileData.map((fObj, idx, fArr) => (
+                  <TrLine
+                      fArr={fArr}
+                      headers={headers}
+                      key={Object.values(fObj).join(';') + idx}
+                      columnsKeyArr={columnsKeyArr}
+                      idx={idx}
+                      fObj={fObj}/>
+              ))
             }
             </tbody>
           </table>
@@ -34,22 +42,41 @@ export default function TablesXlsx({ fileD={} }) {
   );
 }
 
-function TrLine({fObj = {}, idx = 0,columnsKeyArr=[]}) {
+function TrLine({fObj = {}, idx = 0,columnsKeyArr=[],fArr=[],headers=[]}) {
+  const aKey = _get(columnsKeyArr,[0,columnsKeyArr.length -1],'');
+
   return (<tr >
     {
       columnsKeyArr.map((key, index) => {
-        const merge = _get(fObj,[key,'s','merge'], {});
+        let merge = _get(fObj,[key,'s','merge'], null);
+// if (idx === 9) debugger
+        if (!!merge?.delete) return null;
 
-        if (fObj[key] === undefined || !!merge.delete) return null;
-        // if (merge.delete) return null;
+        // const nextA = _get(fArr,[idx +1,aKey]);
+        const nextABC = _get(fArr,[idx +1,key]);
+
+        if (['A','B','C'].includes(key) && !nextABC) {
+          merge = {rowSpan:2};
+        }
+        if (fObj[key] === undefined) {//key === aKey &&
+          // let prevMerge = _get(fArr,[idx -1,aKey,'merge'], {});
+          // if (!prevMerge.delete) {
+          //   return '.';
+          // }
+          // if (2 <= idx && key === 'A' && merge?.delete) {
+          //   return ' s';
+          // }
+          return null;
+        }//['A'].includes(key) &&
 
         const bold = _get(fObj,[key,'s','font','bold'],false) ? {fontWeight: 'bold'}: {};
+        const textAlign = _get(fObj,[key,'s','alignment','horizontal'],'left');
         const style = columnsKeyArr.length === index +1 ? {} :{borderRight: '1px solid grey'};
         const value = !!fObj[key] ? valueOf(fObj[key]) : ' ';
         return (<td
                 key={`${value + key}-${index}-${idx}`}
                 data-col={key}
-                style={{...style,...bold, padding: 4}}
+                style={{...style,...bold, padding: 4,textAlign:textAlign}}
                 {...merge}
             >
               <div contentEditable={true} data-column={key}>{value}</div>
@@ -63,9 +90,9 @@ function TrLine({fObj = {}, idx = 0,columnsKeyArr=[]}) {
 function valueOf(obj) {
   switch (obj?.t) {
     case 's':
-      return obj['v'];
+      return obj['v'];//.trim();
     case 'n':
-      return obj['w'];
+      return !!obj['w'] ? String(obj['v']) : '0';
     case 'd':
       // return obj['w'];
       const date = obj['w'];

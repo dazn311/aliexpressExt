@@ -24,7 +24,7 @@ export function allLinesFromXls(
     const worksheet/*:Worksheet*/ = workbook.Sheets[firstSheetName];
     const worksheetsObj = worksheetsParse(worksheet);
     const columnsKeyArr = columnsKeyHelper(worksheetsObj);
-    const [startHead] = worksheetsObj['headers'];
+    const [startHead] = worksheetsObj['headers'];//"7"
     const fileData = fileDataHelper(worksheetsObj,startHead);
 
 return {
@@ -55,8 +55,8 @@ function columnsKeyHelper(worksheetsObj={}) {
 
 function stylesHelper(obj={},columns={},isBold=false,merge= {}) {
     return Object.keys(obj).length === 0
-        ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length } ,merge}
-        : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true } ,merge};
+        ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length },alignment: { wrapText: true,horizontal:'center'} ,merge}
+        : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true,horizontal:'center'} ,merge};
 }
 
 //Here s = start, r = row, c=col, e= end
@@ -93,31 +93,40 @@ function worksheetsParse(worksheet) {
         const [,c,r] = /([A-Z])(\d+)/.exec(key);
         accObj['columns'][c] = c;
 
-        let isBold = accObj['headers'].includes(r);
+        let isHeader = accObj['headers'].includes(r);
         const value = worksheet[key]?.v;
-        if (/ФИО/.test(value) || /^№$/.test(value)) {
+        if (/ФИО/.test(value) || /^№\s?$/.test(value)) {
             accObj['headers'].push(r);
-            isBold = true;
+            isHeader = true;
         }
 
         if (merges[key] !== 'delete') {
             if (!accObj['fileDataObj'][r]) {
                 accObj['fileDataObj'][r] = {};
             }
-            worksheet[key]['s'] = stylesHelper(accObj['fileDataObj'],accObj['columns'],isBold,merges[key]);
-            accObj['fileDataObj'][r] = {...accObj['fileDataObj'][r], [c]:worksheet[key]};
+
+            const value = _get(worksheet,[key,'v']);
+            const v = typeof value === 'string' ? value.trim() : value;
+            const s = stylesHelper(accObj['fileDataObj'],accObj['columns'],isHeader,merges[key]);
+            accObj['fileDataObj'][r] = {
+                ...accObj['fileDataObj'][r],
+                [c]:{...worksheet[key],s,v}
+            };
 
             if (accObj['fileDataObj'][idx] === undefined) {
                 accObj['fileDataObj'][idx] = {};//isSkip:true
             }
         }
 
-        if (!accObj['header'] && !!worksheet[key]) {
-            accObj['header'] = worksheet[key];
+        //title;
+        if (!accObj['title'] && !!worksheet[key]) {
+            const s = stylesHelper(accObj['fileDataObj'],accObj['columns'],isHeader,merges[key]);
+            accObj['title'] = {...worksheet[key],s};
+            // accObj['header'] = worksheet[key];
         }
 
         return accObj;
-    },{fileDataObj: {},columns:{},header:null,headers:[],colSpan:0,merges});
+    },{fileDataObj: {},columns:{},title:null,headers:[],colSpan:0,merges,sec:0,startTab:0,endTab:0});
 }
 
 //rowspan="2"
