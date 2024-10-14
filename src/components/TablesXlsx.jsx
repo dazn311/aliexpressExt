@@ -52,11 +52,14 @@ function TrLine({fObj = {}, idx = 0,columnsKeyArr=[],fArr=[],headers=[]}) {
 // if (idx === 9) debugger
         if (!!merge?.delete) return null;
 
+        if (!merge) {
+
+        }
         // const nextA = _get(fArr,[idx +1,aKey]);
         const nextABC = _get(fArr,[idx +1,key]);
 
         if (['A','B','C'].includes(key) && !nextABC) {
-          merge = {rowSpan:2};
+          merge = !!merge ? merge :{rowSpan:2};
         }
         if (fObj[key] === undefined) {//key === aKey &&
           // let prevMerge = _get(fArr,[idx -1,aKey,'merge'], {});
