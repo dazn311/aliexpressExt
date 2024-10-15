@@ -1,4 +1,5 @@
 import _get from 'lodash/get';
+import _has from 'lodash/has';
 
 const allLinesFromXlsHelpers = {
     sortKeysHelper,
@@ -18,7 +19,7 @@ function sortKeysHelper(worksheetsObj={}) {
     });
 }
 
-function stylesHelper(obj={},columns={},isBold=false,merge= {}) {
+function stylesHelper(obj={},columns={},isBold=false,merge= null) {
     return Object.keys(obj).length === 0
         ? { font: { name: fontName, bold: isBold, sz: 18,colSpan:Object.keys(columns).length },alignment: { wrapText: true,horizontal:'center'} ,merge}
         : { font: { name: fontName, sz: 11, bold: isBold },alignment: { wrapText: true,horizontal:'center'} ,merge};
@@ -67,30 +68,57 @@ function worksheetsParse(worksheet) {
     return Object.keys(worksheet).filter(workKeys).reduce((accObj,key,idx)=> {
         const [,c,r] = /([A-Z])(\d+)/.exec(key);
         accObj['columns'][c] = c;
+        // if (key === 'E20') debugger;
 
         let isHeader = accObj['headers'].includes(r);
         const value = worksheet[key]?.v;
+
+        if (accObj['headers'].length > 0) {
+            const lastRow = accObj['headers'][accObj['headers'].length - 1];
+            if (lastRow === r) {
+                const nameCol = nameColHelper(value);
+                accObj['headersInColumns'][nameCol] = {c};
+                accObj['headersInColumns'][c] = !!accObj['headersInColumns'][c]
+                    ? [...accObj['headersInColumns'][c],nameCol]
+                    : [nameCol];
+            }
+        }
+
         if (/ФИО/.test(value) || /^№\s?$/.test(value)) {
             accObj['headers'].push(r);
             isHeader = true;
-            accObj['startRowTab'] = r;
+            const nameCol = nameColHelper(value);
+            accObj['headersInColumns'][nameCol] = {c};
+            accObj['headersInColumns'][c] = !!accObj['headersInColumns'][c]
+                ? [...accObj['headersInColumns'][c],nameCol]
+                : [nameCol];
         }
 
         if (merges[key] !== 'delete') {
             if (!accObj['fileDataObj'][r]) {
+                if (!/^A$/.test(c)) {// && !accObj['lastRowName']
+                    // debugger
+                    accObj['endRowTab'] = r;
+                }
                 accObj['fileDataObj'][r] = {};
             }
 
             const v = valueHelper(worksheet,key,c,accObj);
+            // if (r === '34') debugger;
+
+            if (v === 1) {
+                accObj['startRowTab'] = r;
+            }
+
             const s = stylesHelper(accObj['fileDataObj'],accObj['columns'],isHeader,merges[key]);
             accObj['fileDataObj'][r] = {
                 ...accObj['fileDataObj'][r],
                 [c]:{...worksheet[key],s,v}
             };
 
-            if (accObj['fileDataObj'][idx] === undefined) {
-                accObj['fileDataObj'][idx] = {};
-            }
+            // if (accObj['fileDataObj'][idx] === undefined) {
+            //     accObj['fileDataObj'][idx] = {};
+            // }
 
             if (/^A$/.test(c)) {
                 if (typeof v === 'number') {
@@ -101,24 +129,82 @@ function worksheetsParse(worksheet) {
             }
         }
 
+        // if (value === 12) debugger;
+
+        if (isHeader ) {//|| accObj['endRowTab']
+            return accObj;
+        }
+
         //title;
         if (!accObj['title'] && !!worksheet[key]) {
             const s = stylesHelper(accObj['fileDataObj'],accObj['columns'],isHeader,merges[key]);
             accObj['title'] = {...worksheet[key],s};
+            return accObj;
         }
 
-        return accObj;
+        // if (key === 'E8') debugger;
+
+        //add custom merges;
+        if (!!accObj['prevKey'][c] ) {
+            const {r:prevRow} = _get(accObj,['prevKey',c]);
+
+            if (_has(accObj,['fileDataObj',prevRow,c])) {
+                // if (Array.isArray(accObj['headersInColumns'][c]) && accObj['headersInColumns'][c].some(head => /sum/i.test(head))) {
+                //     //for sum amount 1726980;
+                //     accObj['prevKey'][c] = null;
+                //     return accObj;
+                // }
+                const stylePrev = _get(accObj,['fileDataObj',prevRow,c,'s']);
+                const rowSpan = r - prevRow;
+                if (rowSpan < 2) {
+                    accObj['prevKey'][c] = {value:worksheet[key],key, r};
+                    return accObj;
+                }
+                const s = stylesHelper(accObj['fileDataObj'],accObj['columns'],false,{rowSpan: r - prevRow});
+                accObj['fileDataObj'][prevRow] = {
+                    ...accObj['fileDataObj'][prevRow],
+                    [c]:{...accObj['fileDataObj'][prevRow][c],
+                        s: {...stylePrev, ...s}
+                    }
+                };
+            }
+
+            accObj['prevKey'][c] = null;
+
+        } else if (!!worksheet[key]) {
+            if (Array.isArray(accObj['headersInColumns'][c]) && accObj['headersInColumns'][c].some(head => /sum/i.test(head))) {
+                //for sum amount 1726980;
+                // debugger
+                // return accObj;
+            }
+            accObj['prevKey'][c] = {value:worksheet[key],key, r};
+        }
+
+        if (/^A$/.test(c)) {
+            accObj['lastRowA'] = r;
+            if (merges[key]) {
+                accObj['lastRowName'] = c;
+            } else {
+                accObj['lastRowName'] = null;
+            }
+        }
+
+            return accObj;
     },{
         fileDataObj: {},
         columns:{},
         title:null,
         headers:[],
+        headersInColumns: {},
         colSpan:0,
         merges,
         sec:1,
+        prevKey: {},
         currRowTab:0,
+        lastRowA:0,
+        lastRowName:'0',
         startRowTab:0,
-        endRowTab:0
+        endRowTab:null,
     });
 }
 
@@ -130,6 +216,23 @@ function valueHelper(worksheet,key,c,accObj) {
     const value = _get(worksheet,[key,'v']);
     const valueInt = c === 'A' && typeof value === 'number' ? accObj['sec'] :_get(worksheet,[key,'v']);
     return typeof value === 'string' ? value.trim() : valueInt;
+}
+
+function nameColHelper(value) {
+    switch (true) {
+        case /(Сумма|На руки)/i.test(value) :
+            return 'sum';
+        case /Дата/i.test(value) :
+            return 'date';
+        case /спортсмен/i.test(value) :
+            return 'men';
+        case /ФИО/i.test(value) :
+            return 'fio';
+        case /^№\s?$/.test(value) :
+            return 'sec';
+        default:
+            return value;
+    }
 }
 // function headerArr(worksheet) {
 //     const [,rangeF] = /^\w+:([A-Z])\d+.$/.exec(worksheet["!ref"]);

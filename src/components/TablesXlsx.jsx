@@ -43,7 +43,7 @@ export default function TablesXlsx({ fileD={} }) {
 }
 
 function TrLine({fObj = {}, idx = 0,columnsKeyArr=[],fArr=[],headers=[]}) {
-  const aKey = _get(columnsKeyArr,[0,columnsKeyArr.length -1],'');
+  // const aKey = _get(columnsKeyArr,[0,columnsKeyArr.length -1],'');
 
   return (<tr >
     {
@@ -52,16 +52,14 @@ function TrLine({fObj = {}, idx = 0,columnsKeyArr=[],fArr=[],headers=[]}) {
 // if (idx === 9) debugger
         if (!!merge?.delete) return null;
 
-        if (!merge) {
-
-        }
         // const nextA = _get(fArr,[idx +1,aKey]);
-        const nextABC = _get(fArr,[idx +1,key]);
+        // const nextABC = _get(fArr,[idx +1,key]);
 
-        if (['A','B','C'].includes(key) && !nextABC) {
-          merge = !!merge ? merge :{rowSpan:2};
-        }
-        if (fObj[key] === undefined) {//key === aKey &&
+        // if (['A','B','C'].includes(key) && !nextABC) {
+          // merge = !!merge ? merge : {rowSpan:2};
+        // }
+
+        if (fObj[key] === undefined) {//key === aKey && //['A'].includes(key) &&
           // let prevMerge = _get(fArr,[idx -1,aKey,'merge'], {});
           // if (!prevMerge.delete) {
           //   return '.';
@@ -70,7 +68,7 @@ function TrLine({fObj = {}, idx = 0,columnsKeyArr=[],fArr=[],headers=[]}) {
           //   return ' s';
           // }
           return null;
-        }//['A'].includes(key) &&
+        }
 
         const bold = _get(fObj,[key,'s','font','bold'],false) ? {fontWeight: 'bold'}: {};
         const textAlign = _get(fObj,[key,'s','alignment','horizontal'],'left');
