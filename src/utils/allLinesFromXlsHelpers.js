@@ -64,8 +64,10 @@ function mergeParse(worksheet) {
 
 function worksheetsParse(worksheet) {
     const merges  = mergeParse(worksheet);
+    const worksheetKeysArr  = Object.keys(worksheet).filter(workKeys);
+    const lastA = worksheetKeysArr.findLast(k => /^A(\d+)$/.test(k));
 
-    return Object.keys(worksheet).filter(workKeys).reduce((accObj,key,idx)=> {
+    return worksheetKeysArr.reduce((accObj,key,idx)=> {
         const [,c,r] = /([A-Z])(\d+)/.exec(key);
         accObj['columns'][c] = c;
         // if (key === 'E20') debugger;
@@ -202,6 +204,7 @@ function worksheetsParse(worksheet) {
         prevKey: {},
         currRowTab:0,
         lastRowA:0,
+        lastA:lastA,
         lastRowName:'0',
         startRowTab:0,
         endRowTab:null,
